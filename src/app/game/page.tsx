@@ -302,7 +302,7 @@ export default function GamePage() {
     return (
       <div className="min-h-screen relative">
         <FuturisticBackground />
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center pb-32">
           <div className="text-center space-y-4">
             <GameLoader />
             <p className="text-white/60 text-sm animate-pulse">
@@ -324,7 +324,7 @@ export default function GamePage() {
     return (
       <div className="min-h-screen relative">
         <FuturisticBackground />
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center pb-32">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -375,7 +375,7 @@ export default function GamePage() {
       <ModeBadge user={user} balance={balance} />
 
       {/* Main Container */}
-      <div className="container mx-auto px-4 py-8 min-h-screen flex items-center justify-center">
+      <div className="container mx-auto px-4 py-8 pb-32 min-h-screen flex items-center justify-center">
         <motion.div 
           className="w-full max-w-4xl"
           layout

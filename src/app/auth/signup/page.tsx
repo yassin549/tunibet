@@ -56,7 +56,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <main className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
+    <main className="min-h-screen relative flex items-center justify-center p-4 pb-32 overflow-hidden">
       <FuturisticBackground />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -190,10 +190,10 @@ export default function SignUpPage() {
                   disabled={isLoading}
                 >
                   {isLoading ? (
-                    <span className="flex items-center justify-center gap-2">
+                    <div className="flex items-center justify-center gap-2">
                       <div className="h-5 w-5 animate-spin rounded-full border-2 border-black border-t-transparent" />
                       Creating...
-                    </span>
+                    </div>
                   ) : (
                     '📧 Create Account'
                   )}

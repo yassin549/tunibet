@@ -50,7 +50,7 @@ export default function ProfilePage() {
   return (
     <main className="min-h-screen relative py-12">
       <FuturisticBackground />
-      <div className="container mx-auto px-4 max-w-6xl">
+      <div className="container mx-auto px-4 py-8 pb-32 max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -78,7 +78,7 @@ function SignInContent() {
     return (
       <div className="min-h-screen relative">
         <FuturisticBackground />
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center pb-32">
           <div className="text-center space-y-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-gold border-t-transparent mx-auto" />
             <p className="text-white">Loading...</p>
@@ -89,7 +89,7 @@ function SignInContent() {
   }
 
   return (
-    <main className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
+    <main className="min-h-screen relative flex items-center justify-center p-4 pb-32 overflow-hidden">
       <FuturisticBackground />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -227,7 +227,7 @@ export default function SignInPage() {
     <Suspense fallback={
       <div className="min-h-screen relative">
         <FuturisticBackground />
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center pb-32">
           <div className="text-center space-y-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-gold border-t-transparent mx-auto" />
             <p className="text-white">Loading...</p>

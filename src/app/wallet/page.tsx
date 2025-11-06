@@ -170,7 +170,7 @@ export default function WalletPage() {
     return (
       <div className="min-h-screen relative">
         <FuturisticBackground />
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center pb-32">
           <div className="text-center space-y-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-gold border-t-transparent mx-auto" />
             <p className="text-white">Chargement...</p>
@@ -185,7 +185,7 @@ export default function WalletPage() {
   return (
     <main className="min-h-screen relative py-12">
       <FuturisticBackground />
-      <div className="container mx-auto px-4 max-w-5xl">
+      <div className="container mx-auto px-4 pb-32 max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -22,7 +22,7 @@ export default function Home() {
       <FuturisticBackground />
       
       {/* Hero Section - Two Column Layout */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 pb-32 overflow-hidden">
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
             
@@ -48,7 +48,7 @@ export default function Home() {
                     ease: "easeInOut"
                   }}
                 >
-                  <h1 className="font-display text-7xl md:text-9xl font-bold bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent relative">
+                  <h1 className="font-display text-5xl sm:text-7xl md:text-9xl font-bold bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent relative">
                     Tunibet
                   </h1>
                 </motion.div>
@@ -89,7 +89,7 @@ export default function Home() {
                 transition={{ delay: 0.3, duration: 0.6 }}
                 className="space-y-3"
               >
-                <h2 className="text-3xl md:text-4xl font-light text-white">
+                <h2 className="text-xl sm:text-3xl md:text-4xl font-light text-white">
                   <motion.span 
                     className="text-yellow-400 font-bold"
                     animate={{ scale: [1, 1.05, 1] }}
@@ -116,7 +116,7 @@ export default function Home() {
               >
                 <div className="space-y-4">
                   <motion.p 
-                    className="text-2xl md:text-3xl text-white font-semibold"
+                    className="text-lg sm:text-2xl md:text-3xl text-white font-semibold"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
@@ -124,7 +124,7 @@ export default function Home() {
                     Built for Players — Play, Compete, Cash Out
                   </motion.p>
                   <motion.p 
-                    className="text-xl md:text-2xl text-yellow-400 font-bold"
+                    className="text-base sm:text-xl md:text-2xl text-yellow-400 font-bold"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
@@ -132,7 +132,7 @@ export default function Home() {
                     Blockchain-Proven Fair Play
                   </motion.p>
                   <motion.p 
-                    className="text-lg text-gray-400 leading-relaxed"
+                    className="text-sm sm:text-lg text-gray-400 leading-relaxed"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7 }}
@@ -170,7 +170,7 @@ export default function Home() {
                       boxShadow: "0 0 40px rgba(234, 179, 8, 0.6)"
                     }}
                     whileTap={{ scale: 0.95 }}
-                    className="group relative px-12 py-6 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full text-black font-bold text-xl shadow-2xl shadow-yellow-500/50 overflow-hidden"
+                    className="group relative px-8 sm:px-12 py-4 sm:py-6 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full text-black font-bold text-base sm:text-xl shadow-2xl shadow-yellow-500/50 overflow-hidden"
                   >
                     {/* Shimmer Effect */}
                     <motion.div
@@ -178,8 +178,8 @@ export default function Home() {
                       animate={{ x: ["-100%", "100%"] }}
                       transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                     />
-                    <span className="relative flex items-center gap-3">
-                      <Rocket className="w-6 h-6" />
+                    <span className="relative flex items-center gap-2 sm:gap-3">
+                      <Rocket className="w-5 h-5 sm:w-6 sm:h-6" />
                       Create Account — Play & Win
                     </span>
                   </motion.button>
@@ -200,7 +200,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-20"
           >
-            <h2 className="text-5xl md:text-6xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-4">
               Why Join{' '}
               <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
                 Tunibet
@@ -267,7 +267,7 @@ export default function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="relative py-32 px-4">
+      <section className="relative py-32 px-4 pb-40">
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -300,7 +300,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.5 }}
               >
-                <h2 className="text-5xl md:text-7xl font-bold text-white mb-4">
+                <h2 className="text-3xl sm:text-5xl md:text-7xl font-bold text-white mb-4">
                   Ready to{' '}
                   <motion.span 
                     className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent"
@@ -317,7 +317,7 @@ export default function Home() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, duration: 0.5 }}
-                className="text-2xl text-gray-300"
+                className="text-lg sm:text-2xl text-gray-300"
               >
                 Join hundreds of players. Start winning today.
               </motion.p>
@@ -336,7 +336,7 @@ export default function Home() {
                       boxShadow: "0 0 50px rgba(234, 179, 8, 0.7)"
                     }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-20 py-7 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full text-black font-bold text-2xl shadow-2xl shadow-yellow-500/50 relative overflow-hidden group"
+                    className="px-10 sm:px-20 py-5 sm:py-7 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full text-black font-bold text-lg sm:text-2xl shadow-2xl shadow-yellow-500/50 relative overflow-hidden group"
                   >
                     {/* Pulse Animation */}
                     <motion.div
@@ -350,8 +350,8 @@ export default function Home() {
                       }}
                       className="absolute inset-0 bg-yellow-300 rounded-full"
                     />
-                    <span className="relative flex items-center gap-4">
-                      <Rocket className="w-7 h-7" />
+                    <span className="relative flex items-center gap-3 sm:gap-4">
+                      <Rocket className="w-6 h-6 sm:w-7 sm:h-7" />
                       Create Account — Play & Win
                     </span>
                   </motion.button>

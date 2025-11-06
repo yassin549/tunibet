@@ -106,9 +106,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize auth state
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    
     const initAuth = async () => {
       try {
+        // Set a timeout to prevent infinite loading
+        timeoutId = setTimeout(() => {
+          console.warn('Auth initialization timeout - proceeding as guest');
+          setIsLoading(false);
+        }, 3000); // 3 second timeout
+
         const { data: { session } } = await supabase.auth.getSession();
+        
+        clearTimeout(timeoutId); // Clear timeout if successful
         
         if (session?.user) {
           setSupabaseUser(session.user);
@@ -137,6 +147,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
 
     return () => {
+      if (timeoutId) clearTimeout(timeoutId);
       subscription.unsubscribe();
     };
   }, []);

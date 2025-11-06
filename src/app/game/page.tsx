@@ -293,7 +293,58 @@ export default function GamePage() {
       <div className="min-h-screen relative">
         <FuturisticBackground />
         <div className="flex min-h-screen items-center justify-center">
-          <GameLoader />
+          <div className="text-center space-y-4">
+            <GameLoader />
+            <p className="text-white/60 text-sm animate-pulse">Initializing game...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // If no user, show sign-in prompt
+  if (!user) {
+    return (
+      <div className="min-h-screen relative">
+        <FuturisticBackground />
+        <div className="flex min-h-screen items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-md w-full mx-4 space-y-6 text-center"
+          >
+            <div className="space-y-3">
+              <div className="text-6xl mb-4">🎮</div>
+              <h1 className="text-3xl font-bold text-white">Sign In Required</h1>
+              <p className="text-white/70">
+                You need to sign in to play the Tunibet crash game
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => router.push('/auth/signin')}
+                className="w-full py-4 bg-gradient-to-r from-gold to-yellow-500 text-navy text-lg font-bold rounded-xl shadow-lg hover:shadow-gold/50 transition-all"
+              >
+                Sign In
+              </motion.button>
+              
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => router.push('/auth/signup')}
+                className="w-full py-4 bg-white/10 text-white text-lg font-semibold rounded-xl border-2 border-white/20 hover:bg-white/20 transition-all"
+              >
+                Create Account
+              </motion.button>
+            </div>
+
+            <p className="text-white/50 text-sm">
+              New to Tunibet? Sign up and get 1000 TND virtual balance to start playing!
+            </p>
+          </motion.div>
         </div>
       </div>
     );

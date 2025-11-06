@@ -1,16 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
 import { CardClassic, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card-classic';
 import { ButtonGold } from '@/components/ui/button-gold';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Bell, Mail, Lock, User, Globe } from 'lucide-react';
+import { Bell, Mail, Lock, User, Globe, LogOut } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export function AccountSettings() {
-  const { user } = useAuth();
+  const router = useRouter();
+  const { user, signOut } = useAuth();
   const [displayName, setDisplayName] = useState(user?.display_name || '');
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   
@@ -64,6 +66,16 @@ export function AccountSettings() {
       }
     } catch (error) {
       toast.error('Erreur lors de la mise à jour');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast.success('Déconnecté avec succès');
+      router.push('/auth/signin');
+    } catch (error) {
+      toast.error('Erreur de déconnexion');
     }
   };
 
@@ -251,6 +263,47 @@ export function AccountSettings() {
           >
             💾 Enregistrer les préférences
           </ButtonGold>
+        </CardContent>
+      </CardClassic>
+
+      {/* Session Management */}
+      <CardClassic variant="glass">
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <LogOut className="h-5 w-5" />
+            <span>Gestion de Session</span>
+          </CardTitle>
+          <CardDescription>
+            Déconnectez-vous de votre compte en toute sécurité
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="p-4 rounded-xl border-2 border-yellow-500/30 bg-yellow-500/5">
+              <div className="flex items-start space-x-3">
+                <div className="flex-1">
+                  <h4 className="font-semibold text-navy dark:text-cream mb-1">
+                    Session Active
+                  </h4>
+                  <p className="text-sm text-navy/70 dark:text-cream/70">
+                    Vous êtes actuellement connecté en tant que <strong>{user.display_name}</strong>
+                  </p>
+                  <p className="text-xs text-navy/60 dark:text-cream/60 mt-1">
+                    Email: {user.email}
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <ButtonGold
+              variant="outline"
+              onClick={handleLogout}
+              className="w-full"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Se Déconnecter
+            </ButtonGold>
+          </div>
         </CardContent>
       </CardClassic>
 

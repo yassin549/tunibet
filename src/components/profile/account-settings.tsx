@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
-import { CardClassic, CardHeader, CardTitle, CardContent } from '@/components/ui/card-classic';
+import { CardClassic, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card-classic';
 import { ButtonGold } from '@/components/ui/button-gold';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

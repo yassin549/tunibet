@@ -75,7 +75,7 @@ export function GameResultEnhanced({ result, onContinue }: GameResultEnhancedPro
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
-      className="w-full max-w-2xl mx-auto space-y-8 relative"
+      className="w-full max-w-2xl mx-auto space-y-6 relative"
     >
       {/* Animated Background */}
       <div className="absolute inset-0 -z-10">
@@ -115,7 +115,7 @@ export function GameResultEnhanced({ result, onContinue }: GameResultEnhancedPro
         initial={{ y: -50 }}
         animate={{ y: 0 }}
         transition={{ type: 'spring', damping: 10 }}
-        className="text-center space-y-6"
+        className="text-center space-y-4"
       >
         {/* Icon with Particles */}
         <div className="relative">
@@ -125,16 +125,16 @@ export function GameResultEnhanced({ result, onContinue }: GameResultEnhancedPro
               rotate: isWin ? [0, 10, -10, 0] : [0, -5, 5, 0]
             }}
             transition={{ duration: 0.5, repeat: 3 }}
-            className={`w-32 h-32 mx-auto rounded-full flex items-center justify-center shadow-2xl ${
+            className={`w-24 h-24 mx-auto rounded-full flex items-center justify-center shadow-2xl ${
               isWin 
                 ? 'bg-gradient-to-br from-green-400 via-emerald-500 to-green-600' 
                 : 'bg-gradient-to-br from-orange-500 via-red-500 to-red-600'
             }`}
           >
             {isWin ? (
-              <Trophy className="w-16 h-16 text-white drop-shadow-lg" />
+              <Trophy className="w-12 h-12 text-white drop-shadow-lg" />
             ) : (
-              <Target className="w-16 h-16 text-white drop-shadow-lg" />
+              <Target className="w-12 h-12 text-white drop-shadow-lg" />
             )}
           </motion.div>
 
@@ -173,7 +173,7 @@ export function GameResultEnhanced({ result, onContinue }: GameResultEnhancedPro
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, type: 'spring', damping: 10 }}
-            className={`text-6xl md:text-7xl font-black mb-4 ${
+            className={`text-4xl md:text-5xl font-black mb-3 ${
               isWin ? 'text-green-500' : 'text-orange-500'
             }`}
             style={{
@@ -194,7 +194,7 @@ export function GameResultEnhanced({ result, onContinue }: GameResultEnhancedPro
             <motion.p
               animate={isWin ? { scale: [1, 1.1, 1] } : {}}
               transition={{ duration: 1, repeat: Infinity }}
-              className="text-5xl font-black text-cream"
+              className="text-3xl font-black text-cream"
             >
               {result.multiplier.toFixed(2)}x
             </motion.p>
@@ -214,7 +214,7 @@ export function GameResultEnhanced({ result, onContinue }: GameResultEnhancedPro
           initial={{ opacity: 0, y: 30, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.7, type: 'spring' }}
-          className={`p-8 rounded-2xl shadow-2xl ${
+          className={`p-6 rounded-2xl shadow-2xl ${
             isWin 
               ? 'bg-gradient-to-br from-green-500/30 via-green-500/20 to-emerald-500/30 border-4 border-green-500/50' 
               : 'bg-gradient-to-br from-orange-500/30 via-red-500/20 to-red-500/30 border-4 border-orange-500/50'
@@ -232,7 +232,7 @@ export function GameResultEnhanced({ result, onContinue }: GameResultEnhancedPro
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 1, type: 'spring', damping: 8 }}
-            className={`text-6xl font-black ${
+            className={`text-4xl font-black ${
               isWin ? 'text-green-400' : 'text-orange-400'
             }`}
             style={{
@@ -317,7 +317,7 @@ export function GameResultEnhanced({ result, onContinue }: GameResultEnhancedPro
         whileHover={{ scale: 1.05, boxShadow: '0 20px 60px rgba(212, 175, 55, 0.5)' }}
         whileTap={{ scale: 0.95 }}
         onClick={onContinue}
-        className="w-full py-6 bg-gradient-to-r from-gold via-yellow-500 to-gold text-navy text-2xl font-black rounded-2xl shadow-2xl hover:shadow-gold/50 relative overflow-hidden group"
+        className="w-full py-5 bg-gradient-to-r from-gold via-yellow-500 to-gold text-navy text-xl font-black rounded-xl shadow-2xl hover:shadow-gold/50 relative overflow-hidden group"
       >
         {/* Shine effect */}
         <motion.div

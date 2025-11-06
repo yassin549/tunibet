@@ -70,8 +70,8 @@ export function BetHistory() {
     total: bets.length,
     won: bets.filter((b) => b.status === 'cashed_out').length,
     lost: bets.filter((b) => b.status === 'lost').length,
-    totalWagered: bets.reduce((sum, b) => sum + b.amount, 0),
-    totalProfit: bets.reduce((sum, b) => sum + b.profit, 0),
+    totalWagered: bets.reduce((sum, b) => sum + (b.amount || 0), 0),
+    totalProfit: bets.reduce((sum, b) => sum + (b.profit || 0), 0),
   };
 
   return (
@@ -212,7 +212,7 @@ export function BetHistory() {
                         <div className="text-left">
                           <div className="flex items-center space-x-2">
                             <p className="font-bold text-navy dark:text-cream">
-                              {bet.amount.toFixed(2)} TND
+                              {(bet.amount || 0).toFixed(2)} TND
                             </p>
                             <span className="text-xs px-2 py-0.5 rounded-full bg-navy/10 dark:bg-cream/10 text-navy dark:text-cream">
                               {bet.account_type === 'demo' ? '🎮' : '💰'}
@@ -229,13 +229,13 @@ export function BetHistory() {
                         <div className="text-right">
                           {bet.status === 'cashed_out' && bet.cashout_at && (
                             <p className="text-sm font-bold text-gold">
-                              {bet.cashout_at.toFixed(2)}x
+                              {(bet.cashout_at || 0).toFixed(2)}x
                             </p>
                           )}
                           <p className={`text-lg font-bold ${
-                            bet.profit >= 0 ? 'text-green-600' : 'text-crash'
+                            (bet.profit || 0) >= 0 ? 'text-green-600' : 'text-crash'
                           }`}>
-                            {bet.profit >= 0 ? '+' : ''}{bet.profit.toFixed(2)} TND
+                            {(bet.profit || 0) >= 0 ? '+' : ''}{(bet.profit || 0).toFixed(2)} TND
                           </p>
                         </div>
                         {expandedBet === bet.id ? (
@@ -266,7 +266,7 @@ export function BetHistory() {
                         {bet.crash_point && (
                           <div>
                             <p className="text-navy/60 dark:text-cream/60">Point de Crash</p>
-                            <p className="font-bold text-crash">{bet.crash_point.toFixed(2)}x</p>
+                            <p className="font-bold text-crash">{(bet.crash_point || 0).toFixed(2)}x</p>
                           </div>
                         )}
                         <div>

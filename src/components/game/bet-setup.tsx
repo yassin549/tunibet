@@ -13,6 +13,8 @@ export function BetSetup({ onStart }: BetSetupProps) {
   const { balance } = useStore();
   const [amount, setAmount] = useState(10);
   const [autoCashout, setAutoCashout] = useState<number | null>(2.0);
+  const [useCustomMultiplier, setUseCustomMultiplier] = useState(false);
+  const [customMultiplier, setCustomMultiplier] = useState('2.0');
 
   const quickAmounts = [5, 10, 25, 50, 100];
   const quickMultipliers = [1.5, 2.0, 3.0, 5.0, null];
@@ -71,25 +73,60 @@ export function BetSetup({ onStart }: BetSetupProps) {
 
       {/* Auto Cash-out */}
       <div className="space-y-3">
-        <label className="text-sm font-semibold text-cream">Auto Cash-out Multiplier</label>
-        <div className="flex gap-2">
-          {quickMultipliers.map((mult) => (
-            <button
-              key={mult ?? 'manual'}
-              onClick={() => setAutoCashout(mult)}
-              className={`flex-1 py-3 rounded-lg font-bold transition-all ${
-                autoCashout === mult
-                  ? 'bg-gold text-navy'
-                  : 'bg-navy/50 text-cream/60 hover:bg-navy/70'
-              }`}
-            >
-              {mult ? `${mult}x` : 'Manual'}
-            </button>
-          ))}
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-semibold text-cream">Auto Cash-out Multiplier</label>
+          <button
+            onClick={() => {
+              setUseCustomMultiplier(!useCustomMultiplier);
+              if (!useCustomMultiplier) {
+                setAutoCashout(parseFloat(customMultiplier) || 2.0);
+              }
+            }}
+            className="text-xs px-3 py-1 bg-gold/20 text-gold rounded-full hover:bg-gold/30 transition-all"
+          >
+            {useCustomMultiplier ? '📋 Presets' : '✏️ Custom'}
+          </button>
         </div>
+
+        {!useCustomMultiplier ? (
+          <div className="flex gap-2">
+            {quickMultipliers.map((mult) => (
+              <button
+                key={mult ?? 'manual'}
+                onClick={() => setAutoCashout(mult)}
+                className={`flex-1 py-3 rounded-lg font-bold transition-all ${
+                  autoCashout === mult
+                    ? 'bg-gold text-navy'
+                    : 'bg-navy/50 text-cream/60 hover:bg-navy/70'
+                }`}
+              >
+                {mult ? `${mult}x` : 'Manual'}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="relative">
+            <input
+              type="number"
+              value={customMultiplier}
+              onChange={(e) => {
+                setCustomMultiplier(e.target.value);
+                const val = parseFloat(e.target.value);
+                setAutoCashout(val && val >= 1.01 ? val : null);
+              }}
+              step="0.01"
+              min="1.01"
+              max="1000"
+              placeholder="Enter multiplier"
+              className="w-full px-4 py-4 bg-navy/50 border-2 border-gold/30 rounded-xl text-center text-2xl font-bold text-gold focus:border-gold focus:outline-none"
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gold/60 font-semibold">x</span>
+          </div>
+        )}
+
         {autoCashout && (
           <p className="text-xs text-center text-cream/60">
-            Auto cash-out at {autoCashout}x = {(amount * autoCashout).toFixed(2)} TND
+            Auto cash-out at {autoCashout.toFixed(2)}x = {(amount * autoCashout).toFixed(2)} TND
           </p>
         )}
       </div>

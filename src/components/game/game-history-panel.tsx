@@ -60,11 +60,11 @@ export function GameHistoryPanel({ userId }: GameHistoryPanelProps) {
     const lost = betsData.filter((b) => b.status === 'lost').length;
     const total = won + lost;
     const winRate = total > 0 ? (won / total) * 100 : 0;
-    const totalProfit = betsData.reduce((sum, b) => sum + b.profit, 0);
+    const totalProfit = betsData.reduce((sum, b) => sum + (b.profit || 0), 0);
     const avgMultiplier = won > 0 
       ? betsData.filter(b => b.cashout_at).reduce((sum, b) => sum + (b.cashout_at || 0), 0) / won
       : 0;
-    const bestWin = Math.max(...betsData.map(b => b.profit), 0);
+    const bestWin = Math.max(...betsData.map(b => b.profit || 0), 0);
 
     setStats({
       total,
@@ -257,7 +257,7 @@ export function GameHistoryPanel({ userId }: GameHistoryPanelProps) {
                                 </span>
                               </div>
                               <span className="font-bold text-cream">
-                                {bet.amount.toFixed(0)} TND
+                                {(bet.amount || 0).toFixed(0)} TND
                               </span>
                             </div>
                             <div className="text-right">
@@ -267,9 +267,9 @@ export function GameHistoryPanel({ userId }: GameHistoryPanelProps) {
                                 </p>
                               )}
                               <p className={`text-lg font-black ${
-                                bet.profit >= 0 ? 'text-green-500' : 'text-red-500'
+                                (bet.profit || 0) >= 0 ? 'text-green-500' : 'text-red-500'
                               }`}>
-                                {bet.profit >= 0 ? '+' : ''}{bet.profit.toFixed(0)}
+                                {(bet.profit || 0) >= 0 ? '+' : ''}{(bet.profit || 0).toFixed(0)}
                               </p>
                             </div>
                           </div>
@@ -296,8 +296,9 @@ export function GameHistoryPanel({ userId }: GameHistoryPanelProps) {
                   <div className="bg-cream/5 border border-cream/10 rounded-xl p-4">
                     <div className="flex items-end justify-between h-32 gap-2">
                       {bets.slice(0, 10).reverse().map((bet, index) => {
-                        const height = Math.abs(bet.profit) / Math.max(...bets.map(b => Math.abs(b.profit)), 1) * 100;
-                        const isWin = bet.profit >= 0;
+                        const profit = bet.profit || 0;
+                        const height = Math.abs(profit) / Math.max(...bets.map(b => Math.abs(b.profit || 0)), 1) * 100;
+                        const isWin = profit >= 0;
                         
                         return (
                           <motion.div
@@ -310,10 +311,10 @@ export function GameHistoryPanel({ userId }: GameHistoryPanelProps) {
                                 ? 'bg-gradient-to-t from-green-500 to-green-400' 
                                 : 'bg-gradient-to-t from-red-500 to-red-400'
                             } min-h-[10%] relative group`}
-                            title={`${isWin ? '+' : ''}${bet.profit.toFixed(0)} TND`}
+                            title={`${isWin ? '+' : ''}${profit.toFixed(0)} TND`}
                           >
                             <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-navy px-2 py-1 rounded text-xs whitespace-nowrap">
-                              {isWin ? '+' : ''}{bet.profit.toFixed(0)}
+                              {isWin ? '+' : ''}{profit.toFixed(0)}
                             </div>
                           </motion.div>
                         );

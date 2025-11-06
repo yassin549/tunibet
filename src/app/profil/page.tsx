@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/auth-context';
 import { FuturisticBackground } from '@/components/layout/futuristic-background';
 import { motion } from 'framer-motion';
 import { User, Settings, History, Receipt } from 'lucide-react';
-import { ProfileOverview } from '@/components/profile/profile-overview';
+import { ProfileOverviewModern } from '@/components/profile/profile-overview-modern';
 import { AccountSettings } from '@/components/profile/account-settings';
 import { BetHistory } from '@/components/profile/bet-history';
 import { TransactionExport } from '@/components/profile/transaction-export';
@@ -100,7 +100,7 @@ export default function ProfilePage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {activeTab === 'overview' && <ProfileOverview />}
+            {activeTab === 'overview' && <ProfileOverviewModern />}
             {activeTab === 'settings' && <AccountSettings />}
             {activeTab === 'history' && <BetHistory />}
             {activeTab === 'export' && <TransactionExport />}

@@ -106,28 +106,44 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize auth state
   useEffect(() => {
+    let mounted = true;
     let timeoutId: NodeJS.Timeout;
     
     const initAuth = async () => {
       try {
-        // Set a timeout to prevent infinite loading
+        // Set a safety timeout to prevent infinite loading (2 seconds)
         timeoutId = setTimeout(() => {
-          console.warn('Auth initialization timeout - proceeding as guest');
-          setIsLoading(false);
-        }, 3000); // 3 second timeout
+          if (mounted) {
+            console.warn('Auth initialization timeout - proceeding without auth');
+            setIsLoading(false);
+          }
+        }, 2000);
 
-        const { data: { session } } = await supabase.auth.getSession();
+        // Try to get the session
+        const { data: { session }, error } = await supabase.auth.getSession();
         
-        clearTimeout(timeoutId); // Clear timeout if successful
+        // Clear timeout on successful response
+        clearTimeout(timeoutId);
+        
+        if (!mounted) return;
+
+        if (error) {
+          console.error('Auth session error:', error);
+          setIsLoading(false);
+          return;
+        }
         
         if (session?.user) {
           setSupabaseUser(session.user);
           await fetchUserData(session.user);
         }
+        
+        setIsLoading(false);
       } catch (error) {
         console.error('Error initializing auth:', error);
-      } finally {
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -136,6 +152,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.email);
         if (session?.user) {
           setSupabaseUser(session.user);
           await fetchUserData(session.user);
@@ -147,6 +164,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
 
     return () => {
+      mounted = false;
       if (timeoutId) clearTimeout(timeoutId);
       subscription.unsubscribe();
     };

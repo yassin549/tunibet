@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
-import { CardClassic, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card-classic';
+import { CardClassic, CardHeader, CardTitle, CardContent } from '@/components/ui/card-classic';
 import { ButtonGold } from '@/components/ui/button-gold';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Bell, Mail, Lock, User, Globe, LogOut } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { TelegramIntegration } from './telegram-integration';
 
 export function AccountSettings() {
   const router = useRouter();
@@ -265,6 +266,9 @@ export function AccountSettings() {
           </ButtonGold>
         </CardContent>
       </CardClassic>
+
+      {/* Telegram Bot Integration */}
+      <TelegramIntegration />
 
       {/* Session Management */}
       <CardClassic variant="glass">

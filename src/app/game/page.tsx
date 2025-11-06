@@ -9,7 +9,7 @@ import { FuturisticBackground } from '@/components/layout/futuristic-background'
 import { GameLoader } from '@/components/loading/game-loader';
 import { BetSetup } from '@/components/game/bet-setup';
 import { LoadingAnimation } from '@/components/game/loading-animation';
-import { PlaneCanvas3D } from '@/components/game/plane-canvas-3d';
+import { PlaneCanvas2D } from '@/components/game/plane-canvas-2d';
 import { GameResultEnhanced, getRandomMotivation } from '@/components/game/game-result-enhanced';
 import { GameHistoryPanel } from '@/components/game/game-history-panel';
 import { ModeBadge } from '@/components/game/mode-badge';
@@ -21,6 +21,7 @@ export default function GamePage() {
   const router = useRouter();
   const { user, isLoading: authLoading } = useAuth();
   const { balance, multiplier, setMultiplier, setGameStatus, updateBalance, setUser } = useStore();
+  const [mounted, setMounted] = useState(false);
   
   const [phase, setPhase] = useState<GamePhase>('setup');
   const [betParams, setBetParams] = useState<BetParameters | null>(null);
@@ -30,6 +31,10 @@ export default function GamePage() {
   const [startTime, setStartTime] = useState<number>(0);
 
   const supabase = createClient();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Fetch or create round
   const fetchRound = useCallback(async () => {
@@ -109,7 +114,7 @@ export default function GamePage() {
 
       setUserBet(data.bet);
       
-      // Update balance
+      // Update balance - deduct bet amount
       if (user) {
         const newUser = { ...user };
         if (accountType === 'demo') {
@@ -118,6 +123,8 @@ export default function GamePage() {
           newUser.live_balance = data.newBalance;
         }
         setUser(newUser);
+        // Also update the balance in store directly
+        updateBalance(data.newBalance);
       } else {
         updateBalance(balance - params.amount);
       }
@@ -196,7 +203,7 @@ export default function GamePage() {
       // Update bet status to prevent double cashout
       setUserBet({ ...userBet, status: 'cashed_out' });
       
-      // Update balance
+      // Update balance - CRITICAL FIX
       if (user) {
         const newUser = { ...user };
         const accountType = user.balance_type === 'real' ? 'live' : 'demo';
@@ -206,6 +213,8 @@ export default function GamePage() {
           newUser.live_balance = data.newBalance;
         }
         setUser(newUser);
+        // Also update the balance in store directly
+        updateBalance(data.newBalance);
       } else {
         updateBalance(balance + data.payout);
       }
@@ -288,14 +297,22 @@ export default function GamePage() {
     return () => clearInterval(interval);
   }, [phase, currentRound, startTime, userBet, betParams]);
 
-  if (authLoading) {
+  // Show loading until mounted and auth checked
+  if (!mounted || authLoading) {
     return (
       <div className="min-h-screen relative">
         <FuturisticBackground />
         <div className="flex min-h-screen items-center justify-center">
           <div className="text-center space-y-4">
             <GameLoader />
-            <p className="text-white/60 text-sm animate-pulse">Initializing game...</p>
+            <p className="text-white/60 text-sm animate-pulse">
+              {!mounted ? 'Loading...' : 'Checking authentication...'}
+            </p>
+            {authLoading && (
+              <p className="text-white/40 text-xs">
+                This should only take a moment
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -419,7 +436,7 @@ export default function GamePage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
               >
-                <PlaneCanvas3D
+                <PlaneCanvas2D
                   multiplier={multiplier}
                   isActive={true}
                   isCrashed={false}
@@ -436,6 +453,7 @@ export default function GamePage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
+                className="flex items-center justify-center min-h-[600px] pb-32"
               >
                 <GameResultEnhanced result={gameResult} onContinue={handleContinue} />
               </motion.div>

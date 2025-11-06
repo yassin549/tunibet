@@ -121,7 +121,7 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
                   >
-                    Built for Tunisian Players — Play, Compete, Cash Out
+                    Built for Players — Play, Compete, Cash Out
                   </motion.p>
                   <motion.p 
                     className="text-xl md:text-2xl text-yellow-400 font-bold"

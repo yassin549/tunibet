@@ -3,7 +3,14 @@
  * Handles bot setup and configuration
  */
 
-import TelegramBot from 'node-telegram-bot-api';
+// Conditional import - only if package is installed
+let TelegramBot: any;
+try {
+  TelegramBot = require('node-telegram-bot-api');
+} catch (e) {
+  console.warn('node-telegram-bot-api not installed - Telegram bot features disabled');
+  TelegramBot = null;
+}
 
 // Bot token from environment
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8403365999:AAGhAS9XQ1AP0MmM2m8WUZr-waudY146kbQ';
@@ -11,12 +18,16 @@ const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8403365999:AAGhAS9XQ1AP0MmM
 // Webhook URL (set in production)
 const WEBHOOK_URL = process.env.TELEGRAM_WEBHOOK_URL || '';
 
-let botInstance: TelegramBot | null = null;
+let botInstance: any = null;
 
 /**
  * Get or create bot instance
  */
-export function getBot(): TelegramBot {
+export function getBot(): any {
+  if (!TelegramBot) {
+    throw new Error('Telegram bot package not installed. Run: npm install node-telegram-bot-api');
+  }
+  
   if (!botInstance) {
     // In production, use webhook mode
     // In development, use polling mode
@@ -88,7 +99,7 @@ export async function getWebhookInfo() {
 export async function sendMessage(
   chatId: number,
   text: string,
-  options?: TelegramBot.SendMessageOptions
+  options?: any
 ): Promise<boolean> {
   try {
     const bot = getBot();
@@ -109,7 +120,7 @@ export async function sendMessage(
 export async function sendMessageWithKeyboard(
   chatId: number,
   text: string,
-  keyboard: TelegramBot.InlineKeyboardButton[][]
+  keyboard: any[][]
 ): Promise<boolean> {
   return sendMessage(chatId, text, {
     reply_markup: {
@@ -140,7 +151,7 @@ export async function answerCallbackQuery(
  */
 export async function editMessageText(
   text: string,
-  options: TelegramBot.EditMessageTextOptions
+  options: any
 ): Promise<boolean> {
   try {
     const bot = getBot();
@@ -171,7 +182,7 @@ export async function getBotInfo() {
 export async function broadcastMessage(
   chatIds: number[],
   text: string,
-  options?: TelegramBot.SendMessageOptions
+  options?: any
 ): Promise<{ success: number; failed: number }> {
   let success = 0;
   let failed = 0;
@@ -224,7 +235,7 @@ export function createButton(
   text: string,
   callbackData?: string,
   url?: string
-): TelegramBot.InlineKeyboardButton {
+): any {
   if (url) {
     return { text, url };
   }
@@ -235,7 +246,7 @@ export function createButton(
  * Create keyboard row
  */
 export function createKeyboardRow(
-  ...buttons: TelegramBot.InlineKeyboardButton[]
-): TelegramBot.InlineKeyboardButton[] {
+  ...buttons: any[]
+): any[] {
   return buttons;
 }

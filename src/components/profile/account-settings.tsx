@@ -246,7 +246,7 @@ export function AccountSettings() {
           </div>
 
           <ButtonGold
-            variant="secondary"
+            variant="outline"
             onClick={handleUpdateNotifications}
           >
             💾 Enregistrer les préférences

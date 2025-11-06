@@ -2,12 +2,25 @@
 
 import { motion } from 'framer-motion';
 import { Rocket, TrendingUp, Zap } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 interface GameLoaderProps {
   message?: string;
 }
 
 export function GameLoader({ message = 'Loading Game Engine...' }: GameLoaderProps) {
+  const [particles, setParticles] = useState<Array<{ left: string; top: string }>>([]);
+
+  // Generate particles only on client side to avoid hydration mismatch
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: 6 }, () => ({
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+      }))
+    );
+  }, []);
+
   return (
     <div className="flex min-h-[400px] items-center justify-center">
       <div className="relative flex flex-col items-center gap-8">
@@ -100,13 +113,13 @@ export function GameLoader({ message = 'Loading Game Engine...' }: GameLoaderPro
 
         {/* Floating Particles */}
         <div className="absolute inset-0 pointer-events-none">
-          {[...Array(6)].map((_, i) => (
+          {particles.map((particle, i) => (
             <motion.div
               key={i}
               className="absolute h-1 w-1 rounded-full bg-gold"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
+                left: particle.left,
+                top: particle.top,
               }}
               animate={{
                 y: [-20, -60],

@@ -100,17 +100,21 @@ export async function GET(request: NextRequest) {
       .lte('created_at', end.toISOString());
 
     // Calculate mode-specific revenue
+    const demoWagered = demoRevenue?.reduce((sum, bet) => sum + parseFloat(bet.amount.toString()), 0) || 0;
+    const demoPayout = demoRevenue?.reduce((sum, bet) => sum + (bet.profit ? parseFloat(bet.profit.toString()) : 0), 0) || 0;
     const demoStats = {
-      wagered: demoRevenue?.reduce((sum, bet) => sum + parseFloat(bet.amount.toString()), 0) || 0,
-      payout: demoRevenue?.reduce((sum, bet) => sum + (bet.profit ? parseFloat(bet.profit.toString()) : 0), 0) || 0,
+      wagered: demoWagered,
+      payout: demoPayout,
+      revenue: demoWagered - demoPayout,
     };
-    demoStats.revenue = demoStats.wagered - demoStats.payout;
 
+    const liveWagered = liveRevenue?.reduce((sum, bet) => sum + parseFloat(bet.amount.toString()), 0) || 0;
+    const livePayout = liveRevenue?.reduce((sum, bet) => sum + (bet.profit ? parseFloat(bet.profit.toString()) : 0), 0) || 0;
     const liveStats = {
-      wagered: liveRevenue?.reduce((sum, bet) => sum + parseFloat(bet.amount.toString()), 0) || 0,
-      payout: liveRevenue?.reduce((sum, bet) => sum + (bet.profit ? parseFloat(bet.profit.toString()) : 0), 0) || 0,
+      wagered: liveWagered,
+      payout: livePayout,
+      revenue: liveWagered - livePayout,
     };
-    liveStats.revenue = liveStats.wagered - liveStats.payout;
 
     // Get comparison data (previous period)
     const periodLength = end.getTime() - start.getTime();

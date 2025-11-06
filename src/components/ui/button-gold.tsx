@@ -26,6 +26,17 @@ const ButtonGold = forwardRef<HTMLButtonElement, ButtonGoldProps>(
       lg: 'px-8 py-4 text-lg rounded-2xl',
     };
 
+    // Omit event handlers that conflict with framer-motion
+    const { 
+      onAnimationStart, 
+      onAnimationEnd, 
+      onAnimationIteration,
+      onDragStart,
+      onDragEnd,
+      onDrag,
+      ...buttonProps 
+    } = props;
+
     return (
       <motion.button
         ref={ref}
@@ -38,8 +49,8 @@ const ButtonGold = forwardRef<HTMLButtonElement, ButtonGoldProps>(
         whileHover={{ y: -2, scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         disabled={disabled || isLoading}
-        aria-label={props['aria-label'] || (typeof children === 'string' ? children : undefined)}
-        {...props}
+        aria-label={buttonProps['aria-label'] || (typeof children === 'string' ? children : undefined)}
+        {...buttonProps}
       >
         {isLoading ? (
           <span className="flex items-center justify-center">

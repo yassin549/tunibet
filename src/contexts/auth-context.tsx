@@ -50,11 +50,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           google_id: authUser.user_metadata.sub,
           demo_balance: 1000.00,
           live_balance: 0.00,
-          balance_type: 'virtual',
-          virtual_balance_saved: 1000.00,
           is_admin: false,
           is_banned: false,
+          // balance_type and virtual_balance_saved will use database defaults
         };
+
+        console.log('Attempting to create user with ID:', authUser.id);
+        console.log('User data to insert:', newUser);
 
         const { data: createdUser, error: createError } = await supabase
           .from('users')
@@ -63,8 +65,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .single();
 
         if (createError) {
-          console.error('Error creating user:', createError);
-          toast.error('Erreur lors de la création du compte');
+          console.error('Error creating user:', {
+            message: createError.message,
+            details: createError.details,
+            hint: createError.hint,
+            code: createError.code,
+            fullError: JSON.stringify(createError)
+          });
+          
+          // If user already exists, try to fetch it instead
+          if (createError.code === '23505') { // Unique violation
+            const { data: existingUser } = await supabase
+              .from('users')
+              .select('*')
+              .eq('id', authUser.id)
+              .single();
+            
+            if (existingUser) {
+              setUser(existingUser as User);
+              toast.success('Welcome back!');
+              return;
+            }
+          }
+          
+          toast.error(`Database error: ${createError.message || 'Please contact support'}`);
+          // Sign out user if we can't create their record
+          await supabase.auth.signOut();
           return;
         }
 
@@ -192,6 +218,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         email,
         password,
         options: {
+          emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`,
           data: {
             display_name: displayName || email.split('@')[0],
           },
@@ -201,6 +228,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error) {
         if (error.message.includes('already registered')) {
           toast.error('Cet email est déjà utilisé');
+        } else if (error.message.includes('invalid')) {
+          toast.error('Email invalide. Vérifiez la configuration Supabase Auth.');
+        } else if (error.message.includes('Unable to validate email')) {
+          toast.error('Configuration email manquante. Désactivez la confirmation email dans Supabase.');
         } else {
           toast.error('Erreur lors de l\'inscription');
         }

@@ -31,6 +31,23 @@ export function useGameEngine(): GameEngineState {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const channelRef = useRef<any>(null);
 
+  // Start a round (transition from pending to active)
+  const startRound = useCallback(async (roundId: string) => {
+    try {
+      await fetch('/api/rounds', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          roundId,
+          status: 'active',
+        }),
+      });
+      // The realtime subscription will update the state
+    } catch (err) {
+      console.error('Error starting round:', err);
+    }
+  }, []);
+
   // Fetch current active round
   const fetchCurrentRound = useCallback(async () => {
     try {
@@ -53,6 +70,11 @@ export function useGameEngine(): GameEngineState {
           setCurrentRound(round);
           setStoreRound(round);
           setGameStatus('betting'); // New round starts with betting phase
+          
+          // Auto-start round after 5 seconds betting phase
+          setTimeout(() => {
+            startRound(round.id);
+          }, 5000);
         }
       } else {
         setCurrentRound(data);
@@ -60,6 +82,17 @@ export function useGameEngine(): GameEngineState {
         // Map database status to game status
         if (data.status === 'pending') {
           setGameStatus('betting');
+          // Check if round has been pending too long, start it
+          const pendingTime = Date.now() - new Date(data.started_at).getTime();
+          if (pendingTime < 5000) {
+            // Wait remaining time then start
+            setTimeout(() => {
+              startRound(data.id);
+            }, 5000 - pendingTime);
+          } else {
+            // Start immediately if already waited
+            startRound(data.id);
+          }
         } else if (data.status === 'active') {
           setGameStatus('active');
         } else {
@@ -73,7 +106,7 @@ export function useGameEngine(): GameEngineState {
       setError('Failed to load game');
       setIsLoading(false);
     }
-  }, [supabase, setGameStatus, setStoreRound]);
+  }, [supabase, setGameStatus, setStoreRound, startRound]);
 
   // Calculate current multiplier based on round start time
   const calculateCurrentMultiplier = useCallback((round: any) => {
@@ -124,6 +157,12 @@ export function useGameEngine(): GameEngineState {
           setTimeout(() => {
             fetchCurrentRound();
           }, 3000);
+          
+          // Handle losing bets
+          if (userBet && userBet.status === 'active') {
+            toast.error('Crashed! Better luck next time.');
+            setUserBet(null);
+          }
         }
       }, 50); // Update every 50ms for smooth animation
     }
@@ -133,7 +172,7 @@ export function useGameEngine(): GameEngineState {
         clearInterval(intervalRef.current);
       }
     };
-  }, [currentRound, calculateCurrentMultiplier, setMultiplier, setGameStatus, fetchCurrentRound]);
+  }, [currentRound, calculateCurrentMultiplier, setMultiplier, setGameStatus, fetchCurrentRound, userBet]);
 
   // Subscribe to Supabase Realtime for round updates
   useEffect(() => {

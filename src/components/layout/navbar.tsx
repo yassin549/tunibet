@@ -142,7 +142,7 @@ export function Navbar() {
                 href="/auth/signin"
                 className="rounded-full border-2 border-gold bg-gold/10 px-6 py-2.5 text-sm font-medium text-gold hover:bg-gold/20 transition-colors"
               >
-                Connection
+                Sign In
               </Link>
             )}
           </div>

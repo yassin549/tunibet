@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = await createServerSupabaseClient();
 
     // Check admin auth
     const {
@@ -92,16 +92,23 @@ export async function POST(request: NextRequest) {
 
     if (refundError) {
       console.error('Error refunding balance:', refundError);
-      // Try direct update as fallback
-      const { error: directUpdateError } = await supabase
+      // Try direct update as fallback - fetch current balance first
+      const { data: userData, error: fetchError } = await supabase
         .from('users')
-        .update({
-          live_balance: supabase.raw(`live_balance + ${refundAmount}`),
-        })
-        .eq('id', withdrawal.user_id);
+        .select('live_balance')
+        .eq('id', withdrawal.user_id)
+        .single();
 
-      if (directUpdateError) {
-        console.error('Error in direct balance update:', directUpdateError);
+      if (!fetchError && userData) {
+        const newBalance = parseFloat(userData.live_balance.toString()) + refundAmount;
+        const { error: directUpdateError } = await supabase
+          .from('users')
+          .update({ live_balance: newBalance })
+          .eq('id', withdrawal.user_id);
+
+        if (directUpdateError) {
+          console.error('Error in direct balance update:', directUpdateError);
+        }
       }
     }
 

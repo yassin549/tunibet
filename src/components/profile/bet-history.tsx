@@ -285,7 +285,7 @@ export function BetHistory() {
               {hasMore && (
                 <div className="text-center pt-4">
                   <ButtonGold
-                    variant="secondary"
+                    variant="outline"
                     onClick={() => setPage((p) => p + 1)}
                     disabled={isLoading}
                   >

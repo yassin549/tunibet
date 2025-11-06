@@ -43,7 +43,10 @@ export function initGuestDemo(): User {
     display_name: 'Invité',
     demo_balance: 1000,
     live_balance: 0,
+    balance_type: 'virtual',
+    virtual_balance_saved: 1000,
     is_admin: false,
+    created_at: new Date().toISOString(),
   };
 }
 
@@ -122,6 +125,9 @@ export function getGuestDemoAsUser(): User | null {
     display_name: 'Invité',
     demo_balance: guestData.balance,
     live_balance: 0,
+    balance_type: 'virtual',
+    virtual_balance_saved: guestData.balance,
     is_admin: false,
+    created_at: new Date(guestData.createdAt).toISOString(),
   };
 }

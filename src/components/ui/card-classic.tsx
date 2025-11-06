@@ -1,10 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import { HTMLAttributes, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface CardClassicProps extends HTMLAttributes<HTMLDivElement> {
+export interface CardClassicProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onAnimationStart' | 'onDrag' | 'onDragEnd' | 'onDragStart'> {
   variant?: 'glass' | 'cream' | 'navy';
   hover?: boolean;
 }
@@ -17,28 +17,31 @@ const CardClassic = forwardRef<HTMLDivElement, CardClassicProps>(
       navy: 'bg-navy dark:bg-navy border-gold',
     };
 
-    const Component = hover ? motion.div : 'div';
-    const motionProps = hover
-      ? {
-          whileHover: { scale: 1.02 },
-          transition: { duration: 0.2 },
-        }
-      : {};
+    const classNames = cn(
+      'rounded-2xl border-2 p-6 shadow-lg transition-shadow duration-300',
+      'hover:shadow-xl hover:shadow-gold/20',
+      variants[variant],
+      className
+    );
+
+    if (hover) {
+      return (
+        <motion.div
+          ref={ref}
+          className={classNames}
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2 }}
+          {...(props as HTMLMotionProps<'div'>)}
+        >
+          {children}
+        </motion.div>
+      );
+    }
 
     return (
-      <Component
-        ref={ref}
-        className={cn(
-          'rounded-2xl border-2 p-6 shadow-lg transition-shadow duration-300',
-          'hover:shadow-xl hover:shadow-gold/20',
-          variants[variant],
-          className
-        )}
-        {...(hover ? motionProps : {})}
-        {...props}
-      >
+      <div ref={ref} className={classNames} {...props}>
         {children}
-      </Component>
+      </div>
     );
   }
 );

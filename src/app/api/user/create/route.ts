@@ -42,6 +42,8 @@ export async function POST(request: Request) {
         display_name: display_name || email.split('@')[0],
         demo_balance: 1000, // Start with 1000 TND demo balance
         live_balance: 0,
+        balance_type: 'virtual', // Default to virtual/demo mode
+        virtual_balance_saved: 1000, // Save initial demo balance
         is_admin: false,
       })
       .select()

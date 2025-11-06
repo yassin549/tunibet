@@ -50,6 +50,8 @@ export default function RootLayout({
             `,
           }}
         />
+        {/* Canvas Confetti */}
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${inter.variable} min-h-screen flex flex-col`}

@@ -124,7 +124,7 @@ export function GameCanvas() {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(
-        gameStatus === 'waiting' ? 'En attente du prochain round...' : 'Placez vos mises!',
+        gameStatus === 'waiting' ? 'Waiting for next round...' : 'Place your bets!',
         canvas.width / 2,
         canvas.height / 2
       );
@@ -171,10 +171,10 @@ export function GameCanvas() {
           ${gameStatus === 'active' ? 'bg-green-500/80 text-white' : ''}
           ${gameStatus === 'crashed' ? 'bg-crash/80 text-white' : ''}
         `}>
-          {gameStatus === 'waiting' && '⏳ En attente'}
-          {gameStatus === 'betting' && '💰 Paris ouverts'}
-          {gameStatus === 'active' && '🚀 En cours'}
-          {gameStatus === 'crashed' && '💥 Crash!'}
+          {gameStatus === 'waiting' && '⏳ Waiting'}
+          {gameStatus === 'betting' && '💰 Betting Open'}
+          {gameStatus === 'active' && '🚀 In Progress'}
+          {gameStatus === 'crashed' && '💥 Crashed!'}
         </div>
       </div>
     </div>

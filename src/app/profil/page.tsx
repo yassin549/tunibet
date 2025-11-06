@@ -31,7 +31,7 @@ export default function ProfilePage() {
         <div className="flex min-h-screen items-center justify-center">
           <div className="text-center space-y-4">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-gold border-t-transparent mx-auto" />
-            <p className="text-white">Chargement...</p>
+            <p className="text-white">Loading...</p>
           </div>
         </div>
       </div>
@@ -41,10 +41,10 @@ export default function ProfilePage() {
   if (!user) return null;
 
   const tabs = [
-    { id: 'overview' as Tab, label: 'Aperçu', icon: User },
-    { id: 'settings' as Tab, label: 'Paramètres', icon: Settings },
-    { id: 'history' as Tab, label: 'Historique', icon: History },
-    { id: 'export' as Tab, label: 'Exporter', icon: Receipt },
+    { id: 'overview' as Tab, label: 'Overview', icon: User },
+    { id: 'settings' as Tab, label: 'Settings', icon: Settings },
+    { id: 'history' as Tab, label: 'History', icon: History },
+    { id: 'export' as Tab, label: 'Export', icon: Receipt },
   ];
 
   return (
@@ -59,10 +59,10 @@ export default function ProfilePage() {
           {/* Header */}
           <div className="text-center space-y-2">
             <h1 className="font-display text-4xl md:text-5xl font-bold text-white">
-              👤 Mon Profil
+              👤 My Profile
             </h1>
             <p className="text-lg text-gray-400">
-              Gérez votre compte et vos préférences
+              Manage your account and preferences
             </p>
           </div>
 

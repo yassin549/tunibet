@@ -17,7 +17,7 @@ export function ModeBadge({ user, balance }: ModeBadgeProps) {
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="fixed bottom-6 right-6 z-40"
+      className="fixed top-6 left-6 z-40"
     >
       <div
         className={`rounded-2xl border-2 p-4 backdrop-blur-sm shadow-xl ${
@@ -32,7 +32,7 @@ export function ModeBadge({ user, balance }: ModeBadgeProps) {
           </span>
           <div>
             <p className="text-xs font-semibold text-white/80 uppercase tracking-wider">
-              {isVirtual ? 'Mode Virtuel' : 'Mode Réel'}
+              {isVirtual ? 'Demo Mode' : 'Live Mode'}
             </p>
             <p className="text-2xl font-bold text-white">
               {balance.toFixed(2)} <span className="text-sm">TND</span>
@@ -47,7 +47,7 @@ export function ModeBadge({ user, balance }: ModeBadgeProps) {
             className="mt-2"
           >
             <p className="text-xs text-white/90 text-center">
-              Cliquez pour passer en mode réel
+              Practice with virtual money
             </p>
           </motion.div>
         )}

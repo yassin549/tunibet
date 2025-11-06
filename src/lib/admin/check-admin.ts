@@ -3,8 +3,10 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 export interface AdminCheckResult {
   isAdmin: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user: any | null;
   error: string | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   supabase?: any;
 }
 
@@ -13,7 +15,7 @@ export interface AdminCheckResult {
  * Reusable across all admin API routes
  */
 export async function checkAdminAuth(
-  request?: NextRequest
+  _request?: NextRequest
 ): Promise<AdminCheckResult> {
   try {
     const supabase = await createServerSupabaseClient();

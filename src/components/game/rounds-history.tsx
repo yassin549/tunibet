@@ -1,25 +1,62 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useStore } from '@/stores/useStore';
 import { CardClassic, CardHeader, CardTitle, CardContent } from '@/components/ui/card-classic';
 import { motion } from 'framer-motion';
+import { createClient } from '@/lib/supabase/client';
 
 export function RoundsHistory() {
-  const { liveRounds } = useStore();
+  const [rounds, setRounds] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const supabase = createClient();
 
-  // Mock data for demonstration (will be replaced with real data in Prompt 5)
-  const mockRounds = liveRounds.length > 0 ? liveRounds : [
-    { id: '1', crash_point: 2.45, status: 'crashed' },
-    { id: '2', crash_point: 1.23, status: 'crashed' },
-    { id: '3', crash_point: 5.67, status: 'crashed' },
-    { id: '4', crash_point: 1.05, status: 'crashed' },
-    { id: '5', crash_point: 3.89, status: 'crashed' },
-    { id: '6', crash_point: 10.24, status: 'crashed' },
-    { id: '7', crash_point: 1.67, status: 'crashed' },
-    { id: '8', crash_point: 2.11, status: 'crashed' },
-    { id: '9', crash_point: 4.56, status: 'crashed' },
-    { id: '10', crash_point: 1.89, status: 'crashed' },
-  ];
+  // Fetch real rounds data from database
+  useEffect(() => {
+    const fetchRounds = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('rounds')
+          .select('id, crash_point, status, ended_at')
+          .eq('status', 'crashed')
+          .order('ended_at', { ascending: false })
+          .limit(20);
+
+        if (error) {
+          console.error('Error fetching rounds:', error);
+        } else if (data) {
+          setRounds(data);
+        }
+      } catch (err) {
+        console.error('Error fetching rounds:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRounds();
+
+    // Subscribe to real-time updates
+    const channel = supabase
+      .channel('rounds-history')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'rounds',
+          filter: 'status=eq.crashed',
+        },
+        (payload) => {
+          setRounds((prev) => [payload.new, ...prev.slice(0, 19)]);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const getColorClass = (crashPoint: number) => {
     if (crashPoint >= 10) return 'bg-purple-500 text-white';
@@ -31,13 +68,19 @@ export function RoundsHistory() {
   return (
     <CardClassic variant="glass">
       <CardHeader>
-        <CardTitle>Historique des Rounds</CardTitle>
+        <CardTitle>Rounds History</CardTitle>
       </CardHeader>
       <CardContent>
+        {isLoading ? (
+          <div className="text-center py-8 text-cream/60">Loading rounds...</div>
+        ) : rounds.length === 0 ? (
+          <div className="text-center py-8 text-cream/60">No rounds yet</div>
+        ) : (
+          <>
         <div className="flex flex-wrap gap-2">
-          {mockRounds.slice(0, 20).map((round, index) => (
+          {rounds.map((round, index) => (
             <motion.div
-              key={round.id}
+              key={`${round.id}-${index}`}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.05 }}
@@ -46,7 +89,7 @@ export function RoundsHistory() {
                 ${getColorClass(round.crash_point)}
                 shadow-md hover:scale-105 transition-transform cursor-pointer
               `}
-              title={`Round crash à ${round.crash_point.toFixed(2)}x`}
+              title={`Round crashed at ${round.crash_point.toFixed(2)}x`}
             >
               {round.crash_point.toFixed(2)}x
             </motion.div>
@@ -56,24 +99,26 @@ export function RoundsHistory() {
         {/* Stats Summary */}
         <div className="mt-6 grid grid-cols-3 gap-4">
           <div className="text-center">
-            <p className="text-xs text-navy/60 dark:text-cream/60">Moyenne</p>
+            <p className="text-xs text-navy/60 dark:text-cream/60">Average</p>
             <p className="text-lg font-bold text-navy dark:text-cream">
-              {(mockRounds.reduce((sum, r) => sum + r.crash_point, 0) / mockRounds.length).toFixed(2)}x
+              {(rounds.reduce((sum, r) => sum + r.crash_point, 0) / rounds.length).toFixed(2)}x
             </p>
           </div>
           <div className="text-center">
-            <p className="text-xs text-navy/60 dark:text-cream/60">Plus haut</p>
+            <p className="text-xs text-navy/60 dark:text-cream/60">Highest</p>
             <p className="text-lg font-bold text-green-600 dark:text-green-400">
-              {Math.max(...mockRounds.map(r => r.crash_point)).toFixed(2)}x
+              {Math.max(...rounds.map(r => r.crash_point)).toFixed(2)}x
             </p>
           </div>
           <div className="text-center">
-            <p className="text-xs text-navy/60 dark:text-cream/60">Plus bas</p>
+            <p className="text-xs text-navy/60 dark:text-cream/60">Lowest</p>
             <p className="text-lg font-bold text-crash">
-              {Math.min(...mockRounds.map(r => r.crash_point)).toFixed(2)}x
+              {Math.min(...rounds.map(r => r.crash_point)).toFixed(2)}x
             </p>
           </div>
         </div>
+        </>
+        )}
       </CardContent>
     </CardClassic>
   );

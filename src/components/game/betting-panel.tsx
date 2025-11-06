@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import toast from 'react-hot-toast';
 
 export function BettingPanel() {
-  const { balance, gameStatus, multiplier, settings, updateSettings, accountType } = useStore();
+  const { balance, gameStatus, multiplier, settings, updateSettings, user } = useStore();
   const { placeBet, cashOut, userBet } = useGameEngine();
   const [betAmount, setBetAmount] = useState(10);
   const [autoCashout, setAutoCashout] = useState<number | null>(settings.autoCashout);
@@ -40,6 +40,8 @@ export function BettingPanel() {
       return;
     }
 
+    // Determine account type: if user is authenticated, use their balance_type, otherwise default to 'demo'
+    const accountType = user?.balance_type === 'real' ? 'live' : 'demo';
     await placeBet(betAmount, accountType);
   };
 

@@ -53,7 +53,7 @@ export function ProfileOverview() {
       {/* User Info Card */}
       <CardClassic variant="cream">
         <CardHeader>
-          <CardTitle>Informations du Compte</CardTitle>
+          <CardTitle>Account Information</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center space-x-4">
@@ -64,7 +64,7 @@ export function ProfileOverview() {
             </div>
             <div className="flex-1">
               <h3 className="text-xl font-bold text-navy dark:text-cream">
-                {user.display_name || 'Utilisateur'}
+                {user.display_name || 'User'}
               </h3>
               <div className="flex items-center space-x-2 text-navy/70 dark:text-cream/70">
                 <Mail className="h-4 w-4" />
@@ -73,7 +73,7 @@ export function ProfileOverview() {
               <div className="flex items-center space-x-2 text-navy/60 dark:text-cream/60 mt-1">
                 <Calendar className="h-4 w-4" />
                 <span className="text-xs">
-                  Membre depuis {new Date(user.created_at).toLocaleDateString('fr-FR')}
+                  Member since {new Date(user.created_at).toLocaleDateString('en-US')}
                 </span>
               </div>
             </div>
@@ -89,7 +89,7 @@ export function ProfileOverview() {
               <div className="flex items-center justify-center space-x-2 mb-2">
                 <span className="text-2xl">{user.balance_type === 'virtual' ? '🎮' : '💰'}</span>
                 <p className="text-sm font-semibold text-navy/60 dark:text-cream/60">
-                  Mode {user.balance_type === 'virtual' ? 'Virtuel' : 'Réel'}
+                  {user.balance_type === 'virtual' ? 'Demo' : 'Live'} Mode
                 </p>
               </div>
               <p className={`text-3xl font-bold ${
@@ -100,7 +100,7 @@ export function ProfileOverview() {
               </p>
               {user.balance_type === 'virtual' && user.live_balance > 0 && (
                 <p className="text-xs text-navy/60 dark:text-cream/60 mt-2">
-                  Solde réel disponible: {user.live_balance.toFixed(2)} TND
+                  Live balance available: {user.live_balance.toFixed(2)} TND
                 </p>
               )}
             </div>
@@ -115,7 +115,7 @@ export function ProfileOverview() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-navy/60 dark:text-cream/60">Paris Totaux</p>
+                <p className="text-sm text-navy/60 dark:text-cream/60">Total Bets</p>
                 <p className="text-3xl font-bold text-navy dark:text-cream">
                   {isLoading ? '...' : stats.totalBets}
                 </p>
@@ -132,7 +132,7 @@ export function ProfileOverview() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-navy/60 dark:text-cream/60">Misé Total</p>
+                <p className="text-sm text-navy/60 dark:text-cream/60">Total Wagered</p>
                 <p className="text-3xl font-bold text-navy dark:text-cream">
                   {isLoading ? '...' : stats.totalWagered.toFixed(0)}
                   <span className="text-sm ml-1">TND</span>
@@ -150,7 +150,7 @@ export function ProfileOverview() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-navy/60 dark:text-cream/60">Plus Gros Gain</p>
+                <p className="text-sm text-navy/60 dark:text-cream/60">Biggest Win</p>
                 <p className="text-3xl font-bold text-gold">
                   {isLoading ? '...' : stats.biggestWin.toFixed(2)}
                   <span className="text-sm ml-1">TND</span>
@@ -172,7 +172,7 @@ export function ProfileOverview() {
         <CardContent className="space-y-4">
           <div>
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-navy dark:text-cream">Taux de Réussite</span>
+              <span className="text-sm font-medium text-navy dark:text-cream">Win Rate</span>
               <span className="text-sm font-bold text-gold">
                 {isLoading ? '...' : `${stats.winRate.toFixed(1)}%`}
               </span>
@@ -187,13 +187,13 @@ export function ProfileOverview() {
 
           <div className="grid grid-cols-2 gap-4 pt-4 border-t border-navy/10 dark:border-cream/10">
             <div>
-              <p className="text-sm text-navy/60 dark:text-cream/60">Total Gagné</p>
+              <p className="text-sm text-navy/60 dark:text-cream/60">Total Won</p>
               <p className="text-xl font-bold text-green-600">
                 +{isLoading ? '...' : stats.totalWon.toFixed(2)} TND
               </p>
             </div>
             <div>
-              <p className="text-sm text-navy/60 dark:text-cream/60">Série Actuelle</p>
+              <p className="text-sm text-navy/60 dark:text-cream/60">Current Streak</p>
               <p className="text-xl font-bold text-navy dark:text-cream">
                 {isLoading ? '...' : stats.currentStreak} 🔥
               </p>
@@ -205,30 +205,30 @@ export function ProfileOverview() {
       {/* Account Status */}
       <CardClassic variant="glass">
         <CardHeader>
-          <CardTitle>Statut du Compte</CardTitle>
+          <CardTitle>Account Status</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 rounded-lg bg-green-500/10">
-              <span className="text-sm font-medium text-navy dark:text-cream">Email Vérifié</span>
+              <span className="text-sm font-medium text-navy dark:text-cream">Email Verified</span>
               <span className="text-xs font-bold text-green-600 bg-green-500/20 px-3 py-1 rounded-full">
-                ✓ Vérifié
+                ✓ Verified
               </span>
             </div>
             <div className="flex items-center justify-between p-3 rounded-lg bg-navy/5 dark:bg-cream/5">
-              <span className="text-sm font-medium text-navy dark:text-cream">Type de Compte</span>
+              <span className="text-sm font-medium text-navy dark:text-cream">Account Type</span>
               <span className="text-xs font-bold text-navy dark:text-cream bg-navy/10 dark:bg-cream/10 px-3 py-1 rounded-full">
-                Utilisateur Standard
+                Standard User
               </span>
             </div>
             <div className="flex items-center justify-between p-3 rounded-lg bg-navy/5 dark:bg-cream/5">
-              <span className="text-sm font-medium text-navy dark:text-cream">Mode Actuel</span>
+              <span className="text-sm font-medium text-navy dark:text-cream">Current Mode</span>
               <span className={`text-xs font-bold px-3 py-1 rounded-full ${
                 user.balance_type === 'virtual' 
                   ? 'text-green-600 bg-green-500/20' 
                   : 'text-gold bg-gold/20'
               }`}>
-                {user.balance_type === 'virtual' ? '🎮 Virtuel' : '💰 Réel'}
+                {user.balance_type === 'virtual' ? '🎮 Demo' : '💰 Live'}
               </span>
             </div>
           </div>

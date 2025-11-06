@@ -78,7 +78,7 @@ export function Dock() {
 
   const handleNavigation = (path: string, requiresAuth: boolean) => {
     if (requiresAuth && !user) {
-      toast.error('Veuillez vous connecter pour continuer');
+      toast.error('Please sign in to continue');
       router.push('/auth/signin');
       return;
     }
@@ -95,19 +95,19 @@ export function Dock() {
   const dockItems = [
     {
       icon: <Home className="w-8 h-8" />,
-      label: 'Accueil',
+      label: 'Home',
       path: '/',
       requiresAuth: false,
     },
     {
       icon: <Gamepad2 className="w-8 h-8" />,
-      label: 'Jouer',
+      label: 'Play',
       path: '/game',
       requiresAuth: true,
     },
     {
       icon: <User className="w-8 h-8" />,
-      label: 'Profil',
+      label: 'Profile',
       path: '/profil',
       requiresAuth: true,
     },
@@ -140,7 +140,7 @@ export function Dock() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             className="absolute -top-2 -right-2 w-3 h-3 rounded-full bg-green-500 border-2 border-black shadow-lg"
-            title="Connecté"
+            title="Connected"
           />
         )}
       </div>

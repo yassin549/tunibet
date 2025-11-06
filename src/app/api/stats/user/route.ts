@@ -21,7 +21,7 @@ export async function GET(request: Request) {
     // Fetch user's bets
     const { data: bets, error: betsError } = await supabase
       .from('bets')
-      .select('amount, cashout_at, profit, status')
+      .select('amount, cashout_at, profit, status, created_at')
       .eq('user_id', user.id);
 
     if (betsError) {

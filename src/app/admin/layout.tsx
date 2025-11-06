@@ -21,7 +21,7 @@ const navItems = [
 ];
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const { user, loading } = useAuth();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -29,7 +29,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   useEffect(() => {
     async function checkAdmin() {
-      if (loading) return;
+      if (isLoading) return;
 
       if (!user) {
         router.push('/auth/signin');
@@ -55,9 +55,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     }
 
     checkAdmin();
-  }, [user, loading, router]);
+  }, [user, isLoading, router]);
 
-  if (loading || checking) {
+  if (isLoading || checking) {
     return (
       <div className="min-h-screen bg-navy flex items-center justify-center">
         <div className="text-center">

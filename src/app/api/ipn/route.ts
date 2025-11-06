@@ -91,18 +91,27 @@ export async function POST(request: Request) {
       updateData.completed_at = new Date().toISOString();
       updateData.crypto_amount = ipnData.actually_paid;
       
-      // Update user's live balance
-      const { error: balanceError } = await supabase
+      // Update user's live balance - fetch current balance first
+      const { data: userData, error: fetchError } = await supabase
         .from('users')
-        .update({
-          live_balance: supabase.raw(`live_balance + ${transaction.amount}`),
-        })
-        .eq('id', transaction.user_id);
+        .select('live_balance')
+        .eq('id', transaction.user_id)
+        .single();
 
-      if (balanceError) {
-        console.error('Failed to update user balance:', balanceError);
+      if (!fetchError && userData) {
+        const newBalance = parseFloat(userData.live_balance.toString()) + transaction.amount;
+        const { error: balanceError } = await supabase
+          .from('users')
+          .update({ live_balance: newBalance })
+          .eq('id', transaction.user_id);
+
+        if (balanceError) {
+          console.error('Failed to update user balance:', balanceError);
+        } else {
+          console.log(`Added ${transaction.amount} USD to user ${transaction.user_id} (new balance: ${newBalance})`);
+        }
       } else {
-        console.log(`Added ${transaction.amount} USD to user ${transaction.user_id}`);
+        console.error('Failed to fetch user balance:', fetchError);
       }
     }
 

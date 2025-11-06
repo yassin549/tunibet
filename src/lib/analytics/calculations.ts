@@ -170,7 +170,7 @@ export function getDateRangeForPeriod(period: string): {
   end: Date;
 } {
   const end = new Date();
-  let start = new Date();
+  const start = new Date();
 
   switch (period) {
     case '24h':

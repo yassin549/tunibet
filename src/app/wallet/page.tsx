@@ -513,7 +513,7 @@ export default function WalletPage() {
                   Ouvrir le Paiement
                 </ButtonGold>
                 <ButtonGold
-                  variant="secondary"
+                  variant="outline"
                   size="lg"
                   onClick={() => {
                     setShowPaymentModal(false);

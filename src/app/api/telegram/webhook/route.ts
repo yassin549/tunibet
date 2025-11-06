@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import TelegramBot from 'node-telegram-bot-api';
 import { getBot } from '@/lib/telegram/bot';
+
+// Types for Telegram (if package not installed, use any)
+type TelegramUpdate = any;
+type TelegramMessage = any;
+type TelegramCallbackQuery = any;
 import {
   handleStartCommand,
   handleBalanceCommand,
@@ -26,7 +30,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const update: TelegramBot.Update = body;
+    const update: TelegramUpdate = body;
 
     // Process the update
     await processUpdate(update);
@@ -44,7 +48,7 @@ export async function POST(request: NextRequest) {
 /**
  * Process Telegram update
  */
-async function processUpdate(update: TelegramBot.Update) {
+async function processUpdate(update: TelegramUpdate) {
   try {
     // Handle callback queries (button clicks)
     if (update.callback_query) {

@@ -342,8 +342,11 @@ export default function GamePage() {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => router.push('/auth/signin')}
-                className="w-full py-4 bg-gradient-to-r from-gold to-yellow-500 text-navy text-lg font-bold rounded-xl shadow-lg hover:shadow-gold/50 transition-all"
+                onClick={() => {
+                  console.log('Sign In button clicked');
+                  router.push('/auth/signin');
+                }}
+                className="w-full py-4 bg-gradient-to-r from-gold to-yellow-500 text-navy text-lg font-bold rounded-xl shadow-lg hover:shadow-gold/50 transition-all cursor-pointer"
               >
                 Sign In
               </motion.button>
@@ -351,8 +354,11 @@ export default function GamePage() {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => router.push('/auth/signup')}
-                className="w-full py-4 bg-white/10 text-white text-lg font-semibold rounded-xl border-2 border-white/20 hover:bg-white/20 transition-all"
+                onClick={() => {
+                  console.log('Create Account button clicked');
+                  router.push('/auth/signup');
+                }}
+                className="w-full py-4 bg-white/10 text-white text-lg font-semibold rounded-xl border-2 border-white/20 hover:bg-white/20 transition-all cursor-pointer"
               >
                 Create Account
               </motion.button>
